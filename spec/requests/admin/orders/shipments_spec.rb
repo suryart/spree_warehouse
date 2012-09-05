@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "Shipments" do
+  stub_authorization!
   
   before(:each) do
     Spree::Zone.delete_all
@@ -16,7 +17,6 @@ describe "Shipments" do
     end
     
     visit spree.admin_path
-    sign_in_as!(Factory(:admin_user))
     click_link "Orders"
     within('table#listing_orders tbody tr:nth-child(1)') { click_link "R100" }
     

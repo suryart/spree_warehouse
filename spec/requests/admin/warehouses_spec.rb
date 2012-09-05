@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'Warehouses' do
-  before(:each) do
-    sign_in_as!(Factory(:admin_user))
+  stub_authorization!
 
+  before(:each) do
     @warehouse1 = Factory(:warehouse, :name => 'huge_warehouse_1')
     Factory(:warehouse, :name => 'huge_warehouse_2')
     @container_taxonomy1 = Factory(:container_taxonomy, :name => "A1")

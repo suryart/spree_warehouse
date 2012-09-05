@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "Payments" do
+  stub_authorization!
+
   before(:each) do
 
     reset_spree_preferences do |config|
@@ -22,8 +24,6 @@ describe "Payments" do
     @order.update!
     
     visit spree.admin_path
-    sign_in_as!(Factory(:admin_user))
-
   end
 
   context "payment methods" do

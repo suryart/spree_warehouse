@@ -1,3 +1,4 @@
+=begin
 require 'spec_helper'
 
 module Spree
@@ -17,3 +18,4 @@ module Spree
     end
   end
 end
+=end

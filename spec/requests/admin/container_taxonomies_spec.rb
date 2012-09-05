@@ -1,8 +1,9 @@
 require 'spec_helper'
 
 describe "ContainerTaxonomies" do
+  stub_authorization!
+
   before(:each) do
-    sign_in_as!(Factory(:admin_user))
     visit spree.admin_path
     click_link "Warehouses"
     click_link "Container Taxonomies"

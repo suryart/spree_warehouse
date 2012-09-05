@@ -47,12 +47,15 @@ RSpec.configure do |config|
   
   config.include Spree::Core::UrlHelpers
   config.include Spree::Core::TestingSupport::ControllerRequests, :type => :controller
+
   config.include Spree::Api::TestingSupport::Helpers, :type => :controller
+  config.extend Spree::Api::TestingSupport::Setup, :type => :controller
+  
   config.include Devise::TestHelpers, :type => :controller
   config.include SpreeWarehouse::Engine.routes.url_helpers
   config.include Rack::Test::Methods, :type => :requests
 
-  config.extend Spree::Api::TestingSupport::Setup, :type => :controller
+  
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false

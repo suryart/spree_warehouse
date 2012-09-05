@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "Stock" do
+  stub_authorization!
+
   before(:each) do
     product1 = Factory(:product, :name => 'apache baseball cap', :available_on => '2011-01-01 01:01:01', :sku => "A100")
     product2 = Factory(:product, :name => 'zomg shirt', :available_on => '2011-01-01 01:01:01', :sku => "Z100")
@@ -13,7 +15,6 @@ describe "Stock" do
     Factory(:stock_record, :variant => product1.master, :container_taxon => ct_shelve, :quantity => 5, :direction => 'in')
     Factory(:stock_record, :variant => product2.master, :container_taxon => ct_container, :quantity => 10, :direction => 'in')
 
-    sign_in_as!(Factory(:admin_user))
     visit spree.admin_path
   end
 
