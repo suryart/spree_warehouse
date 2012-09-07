@@ -31,6 +31,7 @@ group :test do
   gem 'guard'
   gem 'guard-rspec', '~> 0.6.0'
   gem 'guard-bundler'
+  gem 'rb-inotify', '~> 0.8.8'
 end
 
 unless ENV["CI"]

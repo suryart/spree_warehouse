@@ -1,4 +1,3 @@
-=begin
 require "rqrcode"
 
 module Spree
@@ -16,4 +15,3 @@ module Spree
   	end
   end
 end
-=end

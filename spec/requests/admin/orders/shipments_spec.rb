@@ -19,8 +19,9 @@ describe "Shipments" do
     visit spree.admin_path
     click_link "Orders"
     within('table#listing_orders tbody tr:nth-child(1)') { click_link "R100" }
-    
+    sleep 5  
   end
+  
   context "shipments" do
     it "should be able to create and list shipments for an order", :js => true do
   
