@@ -3,7 +3,8 @@ source 'http://rubygems.org'
 gemspec
 
 gem 'spree', '~> 1.2' 
-gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise"
+#gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise"
+gem 'spree_auth_devise', :path => '../spree_auth_devise'
 gem "therubyracer", :require => 'v8'
 
 gem 'pdfkit'
