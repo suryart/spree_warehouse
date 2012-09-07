@@ -7,7 +7,7 @@
       <td></td>
     <% end %>
 
-    <td><%= vct.container_taxon.name %></td>
+    <td><%= vct.container_taxon.name  if vct.container_taxon %></td>
     <td><%= product.sku %></td>
     <td><%= product.name %></td>
     <td></td>
