@@ -2,10 +2,14 @@ source 'http://rubygems.org'
 
 gemspec
 
-#gem 'spree', '~> 1.2' 
-#gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise"
-gem 'spree', '~> 1.2', :path => '../spree' 
-gem 'spree_auth_devise', :path => '../spree_auth_devise'
+if ENV['USE_LOCAL_SPREE']
+  gem 'spree', '~> 1.2', :path => '../spree' 
+  gem 'spree_auth_devise', :path => '../spree_auth_devise'
+else
+  gem 'spree', :git => "git://github.com/spree/spree", :branch => "1-2-stable"
+  gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise"
+end
+
 gem "therubyracer", :require => 'v8'
 
 gem 'pdfkit'
