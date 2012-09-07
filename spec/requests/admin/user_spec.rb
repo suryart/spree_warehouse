@@ -69,9 +69,9 @@ describe "Users" do
 
   context 'roles' do 
     before do 
-      within('table#listing_users td.user_email') { click_link "a@example.com" }
+      click_link "a@example.com"
+      sleep 5 
       click_link "Edit"
-      page.should have_content("Editing User")
     end
 
     it "admin editing roles", :js => true do
@@ -86,9 +86,8 @@ describe "Users" do
 
   context "API and QR code generation" do
     before do 
-      within('table#listing_users td.user_email') { click_link "a@example.com" }
+      click_link "a@example.com"
       click_link "Edit"
-      page.should have_content("Editing User")
     end
 
     it "should generate API key and QR code" do
