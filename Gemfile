@@ -2,13 +2,8 @@ source 'http://rubygems.org'
 
 gemspec
 
-if ENV['USE_LOCAL_SPREE']
-  gem 'spree', '~> 1.2', :path => '../spree' 
-  gem 'spree_auth_devise', :path => '../spree_auth_devise'
-else
-  gem 'spree', :git => "git://github.com/spree/spree", :branch => "1-2-stable"
-  gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise"
-end
+gem 'spree', :git => "git://github.com/spree/spree", :branch => "1-2-stable"
+gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise", :branch => "1-2-stable"
 
 gem "therubyracer", :require => 'v8'
 
