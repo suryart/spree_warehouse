@@ -1,5 +1,4 @@
-<tr class="blue">
-
+<tr>
   <% if variant.images.any? %>
     <td><%= link_to image_tag(variant.images.first.attachment.url(:mini)), variant.images.first.attachment.url(:product)%></td>
   <% else %>

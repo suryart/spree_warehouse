@@ -8,8 +8,8 @@
 
 <div id="accordion" class="index">
   <% @products.each_with_index do |product, product_i| %>
-    <h3><%= product.name %></h3>
-    <div><%= render :partial => 'variants', :locals => { :product => product, :product_i => product_i } %></div>
+    <h4 id="<%= product.id %>_label"><%= product.name %></h4>
+    <div id="<%= product.id %>_content"><%= render :partial => 'variants', :locals => { :product => product, :product_i => product_i } %></div>
   <% end %>
 </div>
 
