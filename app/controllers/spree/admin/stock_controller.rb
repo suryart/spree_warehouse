@@ -4,7 +4,7 @@ module Spree
 
       before_filter :load_variant, :only => [:restocking, :destocking]
       
-      respond_to :html
+      respond_to :html, :js
       
       def new
         @container_taxons = ContainerTaxon.all
@@ -49,6 +49,9 @@ module Spree
         params[:q][:s] ||= "created_at.desc"
         @search = StockRecord.restocked.search(params[:q])
         @restocked_items = @search.result.page(params[:page]).per(Spree::Config[:admin_products_per_page])
+        respond_with(@restocked_items) do |format|
+          format.html { render 'spree/admin/stock/restocked_items/index' }
+        end
       end
       
       def destocked_items
@@ -56,6 +59,9 @@ module Spree
         params[:q][:s] ||= "created_at.desc"
         @search = StockRecord.destocked.search(params[:q])
         @destocked_items = @search.result.page(params[:page]).per(Spree::Config[:admin_products_per_page])
+        respond_with(@restocked_items) do |format|
+          format.html { render 'spree/admin/stock/destocked_items/index' }
+        end
       end
       
       def restocking
@@ -63,6 +69,9 @@ module Spree
         @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
         @suppliers = Supplier.all
         @supplier_id = params[:supplier_id].nil? ? 'nil' : params[:supplier_id]
+        respond_to do |format|
+          format.js { render 'spree/admin/stock/restocking/restocking' }
+        end
       end
       
       def restock
@@ -104,6 +113,9 @@ module Spree
       def destocking
         @reasons = DestockingReason.all
         @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
+        respond_to do |format|
+          format.js { render 'spree/admin/stock/destocking/destocking' }
+        end
       end
       
       def destock
@@ -142,6 +154,9 @@ module Spree
         @container_taxons = ContainerTaxon.all
         @variant = Variant.find(params[:id])
         @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
+        respond_to do |format|
+          format.js { render 'spree/admin/stock/reassigning/reassigning' }
+        end
       end
 
       private 
