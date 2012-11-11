@@ -30,15 +30,11 @@ module Spree
         end
         render :json => list
       end
-      
+     
       def index 
-        @search = Product.search(params[:q])
-        if params[:per_page].nil?
-          @products = @search.result.page(params[:page]).per(Spree::Config[:admin_products_per_page])
-        else
-          @products = @search.result.page(params[:page]).per(params[:per_page])
-        end
-        
+        @search = Product.includes(master_includes, variant_includes).search(params[:q])
+        @page_count = params[:per_page].nil? ? page_count : params[:per_page]
+        @products = @search.result.page(params[:page]).per(@page_count)
         respond_with(@products) do |format|
           format.html
         end
@@ -47,8 +43,8 @@ module Spree
       def restocked_items
         params[:q] ||= {} 
         params[:q][:s] ||= "created_at.desc"
-        @search = StockRecord.restocked.search(params[:q])
-        @restocked_items = @search.result.page(params[:page]).per(Spree::Config[:admin_products_per_page])
+        @search = StockRecord.restocked.includes({:variant => :product}, :supplier, :container_taxon).search(params[:q])
+        @restocked_items = @search.result.page(params[:page]).per(page_count)
         respond_with(@restocked_items) do |format|
           format.html { render 'spree/admin/stock/restocked_items/index' }
         end
@@ -57,8 +53,8 @@ module Spree
       def destocked_items
         params[:q] ||= {} 
         params[:q][:s] ||= "created_at.desc"
-        @search = StockRecord.destocked.search(params[:q])
-        @destocked_items = @search.result.page(params[:page]).per(Spree::Config[:admin_products_per_page])
+        @search = StockRecord.destocked.includes({:variant => :product}, :container_taxon).search(params[:q])
+        @destocked_items = @search.result.page(params[:page]).per(page_count)
         respond_with(@restocked_items) do |format|
           format.html { render 'spree/admin/stock/destocked_items/index' }
         end
@@ -66,38 +62,20 @@ module Spree
       
       def restocking
         @container_taxons = ContainerTaxon.all
-        @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
         @suppliers = Supplier.all
+        @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
         @supplier_id = params[:supplier_id].nil? ? 'nil' : params[:supplier_id]
         respond_to do |format|
           format.js { render 'spree/admin/stock/restocking/restocking' }
         end
       end
-      
+
       def restock
         unless params[:stock_record][:variant_id].nil?
           @variant = Variant.find(params[:stock_record][:variant_id])
-          unless @variant.container_taxons.exists?(:id => params[:stock_record][:container_taxon_id])
-            #TODO Clean this ugly check 
-            if ContainerTaxon.exists?(params[:stock_record][:container_taxon_id])
-              ct = ContainerTaxon.find(params[:stock_record][:container_taxon_id])
-              @variant.variant_container_taxons.create(:container_taxon_id => ct.id, :quantity => params[:stock_record][:quantity])
-            else
-              @variant.variant_container_taxons.create(:quantity => params[:stock_record][:quantity])
-            end
-
-          else # no existing container taxons for this variant
-            variant_ct = @variant.variant_container_taxons.find_by_container_taxon_id(params[:stock_record][:container_taxon_id])
-            unless variant_ct.quantity.nil?
-              variant_ct.activate if variant_ct.quantity == 0  #will show
-              variant_ct.quantity += params[:stock_record][:quantity].to_i 
-            else
-              variant_ct.quantity = params[:stock_record][:quantity].to_i 
-              variant_ct.activate  #will show
-            end 
-            variant_ct.save
+          if params[:stock_record][:container_taxon_id].nil?
+            restock_without_container_taxon 
           end
-          @variant.save
       
           if @stock_record = StockRecord.create(params[:stock_record])
             flash[:notice] = "#{@variant.name} #{ t(:successfully_restocked) }"
@@ -109,7 +87,7 @@ module Spree
           respond_with { |format| format.html { redirect_to :admin_stock } }
         end
       end
-      
+
       def destocking
         @reasons = DestockingReason.all
         @container_taxon_id = params[:container_taxon_id].nil? ? 'nil' : params[:container_taxon_id]
@@ -145,7 +123,6 @@ module Spree
         end
       end
       
-      #TODO clear this and call directly restock , rename reassigning to reassign
       def reassign
         restock
       end
@@ -161,9 +138,34 @@ module Spree
 
       private 
       
-      def load_variant
-        @variant = Variant.find(params[:id])
-      end 
+        def load_variant
+          @variant = Variant.find(params[:id])
+        end 
+
+        def master_includes
+          {:master => [{:active_variant_container_taxons => :container_taxon}, :images]}
+        end
+
+        def variant_includes
+          {:variants => [{:active_variant_container_taxons => :container_taxon}, :images, :product, {:option_values => :option_type}]}
+        end
+
+        def page_count
+          Spree::Config[:admin_products_per_page]
+        end
+
+        def restock_without_container_taxon
+          if @variant.container_taxons.exists?(:id => params[:stock_record][:container_taxon_id])
+            variant_ct = @variant.variant_container_taxons.find_by_container_taxon_id(params[:stock_record][:container_taxon_id])
+            variant_ct.activate if variant_ct.quantity == 0  #will show
+            variant_ct.quantity += params[:stock_record][:quantity].to_i 
+            variant_ct.save
+          else 
+            ct = ContainerTaxon.find(params[:stock_record][:container_taxon_id])
+            @variant.variant_container_taxons.create(:container_taxon_id => ct.id, :quantity => params[:stock_record][:quantity])
+          end
+          @variant.save
+        end
 
     end
   end

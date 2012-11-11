@@ -45,28 +45,4 @@
 </table>
 <%= paginate @destocked_items %>
 
-<% content_for :sidebar do %>
-  <div class="box" data-hook="admin_destocked_items_index_search">
-    <h3><%= t(:search) %></h3>
-
-    <%= form_for [:admin, @search], :url => admin_destocked_items_path, :html => { :method => :get } do |f| %>
-      <p>
-        <%= f.label :variant_product_name_cont, t(:product_name) %><br />
-        <%= f.text_field :variant_product_name_cont, :size => 18 %>
-      </p>
-
-      <p>
-        <%= f.label :variant_sku_cont, t(:sku) %><br />
-        <%= f.text_field :variant_sku_cont, :size => 15 %>
-      </p>
-      <p>
-        <%= f.label :container_taxon_name_cont, t(:container_taxon) %><br />
-        <%= f.text_field :container_taxon_name_cont, :size => 15 %>
-      </p>
-
-      <div data-hook="admin_destocked_items_index_search_buttons">
-        <p><%= button t(:search) %></p>
-      </div>
-    <% end %>
-  </div>
-<% end %>
+<%= render :partial => 'spree/admin/stock/destocked_items/sidebar' %>
