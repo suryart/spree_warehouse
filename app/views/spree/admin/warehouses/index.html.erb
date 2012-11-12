@@ -23,22 +23,22 @@
   <th></th>
   </tr>
 
-  <% @warehouses.each do |wh| %>
+  <% @warehouses.each do |warehouse| %>
     <tr>
-      <td><%= wh.name %></td>
-      <td><%= wh.code %></td>
+      <td><%= link_to warehouse.name, [:admin, warehouse] %></td>
+      <td><%= warehouse.code %></td>
       <td>
-        <% if wh.container_taxonomies.any? %>
-          <%= wh.container_taxonomies.count %>
+        <% if warehouse.container_taxonomies.any? %>
+          <%= warehouse.container_taxonomies.count %>
         <% else %>
           <%= t(:no_container_taxonomies) %>
         <% end %>
       </td>
-      <td><%= wh.location %></td>
-      <td><%= wh.details %></td>
+      <td><%= warehouse.location %></td>
+      <td><%= warehouse.details %></td>
       <td class="actions">
-        <%= link_to_edit wh %>
-        <%= link_to_delete wh %>
+        <%= link_to_edit warehouse %>
+        <%= link_to_delete warehouse %>
       </td>
     </tr>
   <% end %>

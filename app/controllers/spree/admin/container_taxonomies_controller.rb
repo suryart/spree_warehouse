@@ -8,6 +8,10 @@ module Spree
         respond_with(@container_taxons)
       end
 
+      def index
+        @container_taxonomies = ContainerTaxonomy.includes(:warehouse).all
+      end
+
       private
 
       def location_after_save

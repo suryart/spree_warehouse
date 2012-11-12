@@ -14,9 +14,7 @@ module Spree
                 :code =>  RQRCode::QRCode.new(qr_code(@container_taxon).to_json, :size => 12, :level => :l),
                 :name => @container_taxon.name,
                 :container_taxonomy => @container_taxonomy.name,
-
-                #FIXME Change the whole model
-                :warehouse => @container_taxonomy.warehouses.first.name
+                :warehouse => @container_taxonomy.warehouse.name
               }
 
         render_to_string :partial => 'qr_single', :locals => { :qr => @qr }
@@ -29,9 +27,7 @@ module Spree
                     :code =>  RQRCode::QRCode.new(qr_code(ct).to_json, :size => 12, :level => :l), 
                     :name => ct.name,
                     :container_taxonomy => ct.container_taxonomy.name, 
-
-                    #FIXME Change the whole model
-                    :warehouse => ct.container_taxonomy.warehouses.first.name    
+                    :warehouse => @container_taxonomy.warehouse.name   
                   }
         end
   
@@ -165,61 +161,10 @@ module Spree
 
       private
 
-      def container_taxonomy
-        @container_taxonomy ||= ContainerTaxonomy.find(params[:container_taxonomy_id])
-      end
-      
-      
-=begin
-      def selected
-        @product = load_product
-        @container_taxons = @product.container_taxons
+        def container_taxonomy
+          @container_taxonomy ||= ContainerTaxonomy.find(params[:container_taxonomy_id])
+        end
 
-        respond_with(:admin, @container_taxons)
-      end
-
-      def available
-        @product = load_product
-        @container_taxons = params[:q].blank? ? [] : ContainerTaxon.where('lower(name) LIKE ?', "%#{params[:q].mb_chars.downcase}%")
-        @container_taxons.delete_if { |container_taxon| @product.container_taxons.include?(container_taxon) }
-
-        respond_with(:admin, @container_taxons)
-      end
-
-      def remove
-        @product = load_product
-        @container_taxon = ContainerTaxon.find(params[:id])
-        @product.container_taxons.delete(@container_taxon)
-        @product.save
-        @container_taxons = @product.container_taxons
-
-        respond_with(@container_taxon) { |format| format.js { render_js_for_destroy } }
-      end
-
-      def select
-        @product = load_product
-        @container_taxon = ContainerTaxon.find(params[:id])
-        @product.container_taxons << @container_taxon
-        @product.save
-        @container_taxons = @product.container_taxons
-
-        respond_with(:admin, @container_taxons)
-      end
-
-      def batch_select
-        @product = load_product
-        @container_taxons = params[:container_taxon_ids].map{|id| ContainerTaxon.find(id)}.compact
-        @product.container_taxons = @container_taxons
-        @product.save
-        redirect_to selected_admin_product_container_taxons_url(@product)
-      end
-
-      private
-
-      def load_product
-        Product.find_by_permalink! params[:product_id]
-      end
-=end
     end
   end
 end

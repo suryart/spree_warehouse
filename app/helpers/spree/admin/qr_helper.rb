@@ -11,8 +11,8 @@ module Spree
                                                 :name =>  @container_taxonomy.name 
                                               }, 
 
-                      :warehouses =>         {  :id => @container_taxonomy.warehouses.map(&:id).join(' '),
-                                                :name => @container_taxonomy.warehouses.map(&:name).join(' ')
+                      :warehouse =>         {  :id => @container_taxonomy.warehouse.id,
+                                                :name => @container_taxonomy.warehouse.name
                                              } 
                   } 
                 }
