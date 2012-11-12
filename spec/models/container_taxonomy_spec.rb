@@ -10,6 +10,7 @@ describe Spree::ContainerTaxonomy do
 
   context "shoulda validations" do
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:warehouse_id) }
   end
 
   context "#destroy" do

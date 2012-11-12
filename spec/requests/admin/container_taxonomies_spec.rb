@@ -21,13 +21,14 @@ describe "ContainerTaxonomies" do
 
   context "create" do
     before(:each) do
+      Factory(:warehouse, :name => "Subaru")
       click_link "admin_new_container_taxonomy_link"
     end
 
     it "should allow an admin to create a new taxonomy" do
-      
       page.should have_content("New Container Taxonomy")
       fill_in "container_taxonomy_name", :with => "sports"
+      select "Subaru", :from => "container_taxonomy_warehouse_id"
       click_button "Create"
       page.should have_content("successfully created!")
     end
@@ -35,7 +36,8 @@ describe "ContainerTaxonomies" do
     it "should display validation errors" do
       fill_in "container_taxonomy_name", :with => ""
       click_button "Create"
-      page.should have_content("can't be blank")
+      page.should have_content("Name can't be blank")
+      page.should have_content("Warehouse can't be blank")
     end
   end
 
