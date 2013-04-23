@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe "Variants" do
+  stub_authorization!
+  
   context "creating a new variant" do
     
     before :each do 
-      sign_in_as!(Factory(:admin_user))
       visit spree.admin_path
-      
     end
     
     it "should allow an admin to create a new variant" do

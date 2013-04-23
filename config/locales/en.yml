@@ -1,5 +1,4 @@
 en:
-  warehouse: "Warehouse"
   new_warehouse: "New Warehouse"
   edit_warehouse: "Editing Warehouse"
   list_warehouses: "Warehouses"
@@ -20,6 +19,7 @@ en:
     edit: "Edit VC Type"
   warehouses: "Warehouses"
   warehouse:
+    singular: "Warehouse"
     name: "Name"
     code: "Code"
     location: "Location"

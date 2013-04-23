@@ -1,40 +1,23 @@
 <div>
   <%= f.field_container :name do %>
-    <%= f.label :name, t("warehouse.name") %><br />
-    <%= f.text_field :name %>
+    <%= f.label :name, t("warehouse.name") %><span class="required">*</span><br />
     <%= error_message_on :warehouse, :name %>
+    <%= f.text_field :name %>
   <% end %>
 
   <%= f.field_container :code do %>
     <%= f.label :location, t("warehouse.code") %><br />
-    <%= f.text_field :code %>
     <%= error_message_on :warehouse, :code %>
-  <% end %>
-
-  <%= f.field_container 'container_taxonomies[]' do %>
-    <%= f.label 'warehouse[container_taxonomy_ids][]', t(:container_taxonomies) %><br />
-    <% if defined? container_taxonomies %>
-      <% container_taxonomies.each_with_index do |ct, ct_i| %>
-        <% unless ct_i == 0 %> 
-          <br/>
-        <% end %>
-        <%= check_box_tag "warehouse[container_taxonomy_ids][]", ct.id, container_taxonomy_selected?(ct)  %>
-        <%= ct.name.humanize %>
-      <% end %>
-    <% else %>
-      <%= t(:no_container_taxonomies) %>
-    <% end %>
+    <%= f.text_field :code %>
   <% end %>
 
   <%= f.field_container :location do %>
     <%= f.label :location, t("warehouse.location") %><br />
     <%= f.text_area :location %>
-    <%= error_message_on :warehouse, :location %>
   <% end %>
 
   <%= f.field_container :details do %>
     <%= f.label :details, t("warehouse.details") %><br />
     <%= f.text_area :details %>
-    <%= error_message_on :warehouse, :details %>
   <% end %>      
 </div>

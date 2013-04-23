@@ -1,4 +1,4 @@
-<% variant.variant_container_taxons.active.each do |vct| %>
+<% variant.active_variant_container_taxons.each do |vct| %>
   <tr>
 
     <% if variant.images.any? %>
@@ -6,6 +6,8 @@
     <% else %>
       <td></td>
     <% end %>
+    
+    <td>variant_ct</td>
 
     <td>
       <% if vct.container_taxon %>
@@ -20,19 +22,13 @@
     <td><%= variant.options_text %></td>
     <td><%= vct.quantity %></td>
 
-    <% if vct.container_taxon_id %>
-      <td id="restocking_<%= variant.id %>_<%= vct.container_taxon_id %>">
-    <% else %>
-      <td id="restocking_<%= variant.id %>_nil">
-    <% end %>
-        <%= button_link_to t(:restock), admin_restocking_path(variant, :container_taxon_id => vct.container_taxon_id),  { :id => variant.id, :icon => 'switch', :remote => true } %>
+
+    <td id="restocking_<%= variant.id %>_<%= vct.cont_taxon_id %>">
+      <%= button_link_to t(:restock), admin_restocking_path(variant, :container_taxon_id => vct.container_taxon_id),  { :id => variant.id, :icon => 'switch', :remote => true } %>
       </td>
 
-    <% if vct.container_taxon_id %>
-      <td id="destocking_<%= variant.id %>_<%= vct.container_taxon_id %>">
-    <% else %>
-      <td id="destocking_<%= variant.id %>_nil">
-    <% end %>
+
+    <td id="destocking_<%= variant.id %>_<%= vct.cont_taxon_id %>">
       <%= button_link_to t(:destock), admin_destocking_path(variant, :container_taxon_id => vct.container_taxon_id),  { :id => variant.id, :icon => 'switch', :remote => true } %>
     </td>
 

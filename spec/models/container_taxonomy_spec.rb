@@ -5,11 +5,12 @@ describe Spree::ContainerTaxonomy do
   context "validation" do
     it { should have_valid_factory(:container_taxonomy) }
     it { should have_valid_factory(:container_taxon) }
-    it { should have_and_belong_to_many(:warehouses) }
+    it { should belong_to :warehouse }
   end
 
   context "shoulda validations" do
     it { should validate_presence_of(:name) }
+    it { should validate_presence_of(:warehouse_id) }
   end
 
   context "#destroy" do

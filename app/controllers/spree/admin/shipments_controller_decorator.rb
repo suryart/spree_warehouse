@@ -1,7 +1,6 @@
 module Spree
   module Admin
     ShipmentsController.class_eval do 
-  
       before_filter :load_shipping_methods, :except => [:country_changed, :index, :picking_list, :create_package]
          
       def create_package

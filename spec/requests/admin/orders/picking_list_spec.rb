@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe "Picking List" do
+  stub_authorization!
   
   Spree::Zone.delete_all
   let(:shipping_method) { Factory(:shipping_method, :zone => Spree::Zone.find_by_name('North America') || Factory(:zone, :name => 'North America')) }
@@ -16,7 +17,6 @@ describe "Picking List" do
     end
     
     visit spree.admin_path
-    sign_in_as!(Factory(:admin_user))
 
     click_link "Orders"
     within('table#listing_orders tbody tr:nth-child(1)') { click_link "R100" }
@@ -38,7 +38,7 @@ describe "Picking List" do
     find('table.index tbody tr:nth-child(2) td:nth-child(5)').text.should == "Pending"
     
     click_link "Picking List"
-    sleep 10
+    sleep 5
     within('table.index tbody tr:nth-child(2)') { click_button "Pick" }
     page.should have_content("Unit Picked")
     within('table.index tbody tr:nth-child(2)') { page.should have_content "Picked" }

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "Destocked items" do
+  stub_authorization!
+
   before(:each) do
     product1 = Factory(:product, :name => 'apache baseball cap', :available_on => '2011-01-01 01:01:01', :sku => "A100")
     product2 = Factory(:product, :name => 'zomg shirt', :available_on => '2011-01-01 01:01:01', :sku => "Z100")
@@ -12,7 +14,6 @@ describe "Destocked items" do
     Factory(:stock_record, :variant => product1.master, :container_taxon => ct_shelve, :quantity => 5, :direction => 'out')
     Factory(:stock_record, :variant => product2.master, :container_taxon => ct_container, :quantity => 10, :direction => 'out')
 
-    sign_in_as!(Factory(:admin_user))
     visit spree.admin_path
 
     click_link "Stock"

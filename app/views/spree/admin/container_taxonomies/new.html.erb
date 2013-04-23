@@ -1,10 +1,14 @@
 <%= render :partial => 'spree/admin/shared/warehouse_sub_menu' %>
 <h1><%= t(:new_container_taxonomy) %></h1>
 
-<%= form_for [:admin, @container_taxonomy] do |f| %>
-  <%= render :partial => 'form', :locals => { :f => f } %>
+<%= render 'spree/shared/error_messages', :target => @container_taxonomy %>
 
-  <p class="form-buttons" data-hook="buttons">
-    <%= button t(:create) %>
-  </p>
-<% end %>
+<div data-hook="admin_container_taxonomy_new_form" id="admin_container_taxonomy_new_form" >
+	<%= form_for [:admin, @container_taxonomy] do |f| %>
+	  <%= render :partial => 'form', :locals => { :f => f } %>
+
+	  <p class="form-buttons" data-hook="buttons">
+	    <%= button t(:create) %>
+	  </p>
+	<% end %>
+</div>

@@ -1,48 +1,87 @@
 require 'spec_helper'
 
 describe "Users" do
+  stub_authorization!
+
   before(:each) do
-    
     create(:user, :email => "a@example.com")
     create(:user, :email => "b@example.com")
-    sign_in_as!(Factory(:admin_user))
     visit spree.admin_path
     click_link "Users"
-    within('table#listing_users td.user_email') { click_link "a@example.com" }
-    click_link "Edit"
-    page.should have_content("Editing User")
   end
 
-  it "admin editing email with validation error" do
-    fill_in "user_email", :with => "a"
-    click_button "Update"
-    page.should have_content("Email is invalid")
+  context "users index page with sorting" do
+    before(:each) do
+      click_link "users_email_title"
+    end
+
+    it "should be able to list users with order email asc" do
+      page.should have_css 'table#listing_users'
+      within("table#listing_users") do
+        page.should have_content "a@example.com"
+        page.should have_content "b@example.com"
+      end
+    end
+
+    it "should be able to list users with order email desc" do
+      click_link "users_email_title"
+      within("table#listing_users") do
+        page.should have_content "a@example.com"
+        page.should have_content "b@example.com"
+      end
+    end
   end
 
-  it "admin editing roles" do
-    find_field('user_role_admin')['checked'].should be_true
-    uncheck "user_role_admin"
-    click_button "Update"
-    page.should have_content("User has been successfully updated!")
-    within('table#listing_users') { click_link "Edit" }
-    find_field('user_role_admin')['checked'].should be_false
+  context "searching users" do
+    it "should display the correct results for a user search" do
+      fill_in "q_email_cont", :with => "a@example.com"
+      click_button "Search"
+      within("table#listing_users") do
+        page.should have_content "a@example.com"
+        page.should_not have_content "b@example.com"
+      end
+    end
   end
 
-  it "listing users when anonymous users are present" do
-    Spree::User.anonymous!
-    click_link "Users"
-    page.should_not have_content("@example.net")
+  context "editing users" do
+    before(:each) do
+      click_link "a@example.com"
+      click_link "Edit"
+    end
+
+    it "should let me edit the user email" do
+      fill_in "user_email", :with => "a@example.com99"
+      click_button "Update"
+
+      page.should have_content "successfully updated!"
+      page.should have_content "a@example.com99"
+    end
+
+    it "should let me edit the user password" do
+      fill_in "user_password", :with => "welcome"
+      fill_in "user_password_confirmation", :with => "welcome"
+      click_button "Update"
+
+      page.should have_content "successfully updated!"
+    end
   end
 
   context "API and QR code generation" do
-    it "should generate API key and QR code" do
-      page.should have_content("No key")
-      page.should_not have_content("Generate QR Code")
-      click_button "Generate API key"
-      page.should have_content("Key generated")
-      page.should_not have_content("No key")
+    before do 
+      click_link "a@example.com"
+      click_link "Edit"
+    end
 
-      page.should have_content("Generate QR code")
+    it "should generate API key and QR code" do
+      page.should have_content "No key"
+      page.should_not have_content "Generate QR Code"
+      page.should have_content "To generate QR code you need to generate API key first"
+
+      click_button "Generate API key"
+      page.should have_content "Key generated"
+      page.should_not have_content "No key"
+
+      page.should have_content "Generate QR code"
       click_link "Generate QR code"
 
       #TODO Write better check 

@@ -21,5 +21,9 @@ module Spree
     def active?
       self.deactivated_at.nil?
     end
+
+    def cont_taxon_id
+      self.container_taxon_id ||= "nil"
+    end
   end
 end

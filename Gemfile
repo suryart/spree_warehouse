@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'spree', '1.1.2' 
-#gem 'spree', :git => 'git://github.com/spree/spree.git', :branch => '1-1-stable'
+gem 'spree', :git => "git://github.com/spree/spree", :branch => "master"
+gem "spree_auth_devise", :git => "git://github.com/spree/spree_auth_devise", :branch => "master"
 
 gem "therubyracer", :require => 'v8'
 

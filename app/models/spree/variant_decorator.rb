@@ -3,6 +3,7 @@ module Spree
     has_many :stock_records
     has_many :variant_container_taxons
     has_many :container_taxons, :through => :variant_container_taxons
+    has_many :active_variant_container_taxons, :class_name => "Spree::VariantContainerTaxon", :conditions => {:deactivated_at => nil}
 
     attr_accessible :visual_code, :variant_container_taxons
 
@@ -14,5 +15,8 @@ module Spree
       self.count_on_hand = self.count_on_hand - num
     end
     
+    def has_active_taxons? 
+      self.active_variant_container_taxons.any?
+    end
   end
 end

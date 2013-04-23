@@ -1,9 +1,10 @@
 require 'spec_helper'
 
 describe "Destocking Reasons" do
+  stub_authorization!
+
   before(:each) do
     visit spree.admin_path
-    sign_in_as!(Factory(:admin_user))
     click_link "Configuration"
   end
 

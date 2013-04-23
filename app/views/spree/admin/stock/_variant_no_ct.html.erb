@@ -1,11 +1,10 @@
-<tr class="blue">
-
+<tr>
   <% if variant.images.any? %>
     <td><%= link_to image_tag(variant.images.first.attachment.url(:mini)), variant.images.first.attachment.url(:product)%></td>
   <% else %>
     <td></td>
   <% end %>
-
+  <td>variant_no_ct</td>
   <td><%= t(:no_container_taxons) %></td>
   <td><%= variant.sku %></td>
   <td><%= variant.product.name %></td>

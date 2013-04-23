@@ -1,6 +1,7 @@
 <table id="stock" class="index">
   <tr>
     <th><%= t(:image) %></th>
+    <th>debug</th>
     <th><%= t(:container_taxon) %></th>
     <th><%= t(:sku) %></th>
     <th><%= t(:product) %></th>
@@ -13,7 +14,7 @@
   <% if product.has_variants? %>
     <% product.variants.each_with_index do |variant, variant_index| %>
 
-      <% if variant.variant_container_taxons.active.any? %>
+      <% if variant.has_active_taxons? %>
         <div><%= render :partial => 'variant_ct', :locals => { :variant => variant, :product_i => product_i } %></div>
       <% else %>
         <div><%= render :partial => 'variant_no_ct', :locals => { :variant => variant, :product_i => product_i } %></div>
@@ -23,7 +24,7 @@
 
   <% else %>
 
-    <% if product.master.variant_container_taxons.active.any? %>
+    <% if product.master.has_active_taxons? %>
       <div><%= render :partial => 'product_ct', :locals => { :product => product, :product_i => product_i } %></div>
     <% else %>
       <div><%= render :partial => 'product_no_ct', :locals => { :product => product, :product_i => product_i } %></div>

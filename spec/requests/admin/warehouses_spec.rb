@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'Warehouses' do
-  before(:each) do
-    sign_in_as!(Factory(:admin_user))
+  stub_authorization!
 
+  before(:each) do
     @warehouse1 = Factory(:warehouse, :name => 'huge_warehouse_1')
     Factory(:warehouse, :name => 'huge_warehouse_2')
     @container_taxonomy1 = Factory(:container_taxonomy, :name => "A1")
@@ -55,21 +55,8 @@ describe 'Warehouses' do
       fill_in "warehouse_code", :with => "12345"
       fill_in "warehouse_location", :with => "Japan"
       fill_in "warehouse_details", :with => "Details"
-
-      checkbox = find('#warehouse_container_taxonomy_ids_')
-      checkbox.should_not be_checked
-      check "warehouse_container_taxonomy_ids_"
-      
-     
       click_button "Update"
       page.should have_content("successfully updated")
-      #TODO Make check
-      #page.should have_content("A1")
-       
-      #TODO Check for unique checkbox id
-      click_link "Edit"
-      checkbox = find('#warehouse_container_taxonomy_ids_')
-      checkbox.should be_checked
     end
   end
 

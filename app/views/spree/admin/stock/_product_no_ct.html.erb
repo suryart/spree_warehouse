@@ -1,11 +1,12 @@
-<tr class="blue">
+<tr>
 
-  <% if product.images.any? %>
-    <td><%= link_to image_tag(product.images.first.attachment.url(:mini)), product.images.first.attachment.url(:product)%></td>
+  <% if product.master.images.any? %>
+    <td><%= link_to image_tag(product.master.images.first.attachment.url(:mini)), product.master.images.first.attachment.url(:product)%></td>
   <% else %>
     <td></td>
   <% end %>
 
+  <td>product_no_ct</td>
   <td></td>
   <td><%= product.sku %></td>
   <td><%= product.name %></td>
